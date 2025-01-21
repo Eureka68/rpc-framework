@@ -1,0 +1,3 @@
+hessian=com.wuxiaowei.rpc.serializer.HessianSerializer
+json=com.wuxiaowei.rpc.serializer.JsonSerializer
+kryo=com.wuxiaowei.rpc.serializer.KryoSerializer
