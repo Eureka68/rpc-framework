@@ -1,2 +1,2 @@
-etcd=com.yupi.yurpc.registry.EtcdRegistry
-zookeeper=com.yupi.yurpc.registry.ZooKeeperRegistry
+etcd=com.wuxiaowei.rpc.registry.EtcdRegistry
+zookeeper=com.wuxiaowei.rpc.registry.ZooKeeperRegistry

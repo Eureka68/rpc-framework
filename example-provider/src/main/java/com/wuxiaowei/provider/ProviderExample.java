@@ -10,6 +10,7 @@ import com.wuxiaowei.rpc.registry.Registry;
 import com.wuxiaowei.rpc.registry.RegistryFactory;
 import com.wuxiaowei.rpc.server.HttpServer;
 import com.wuxiaowei.rpc.server.VertxHttpServer;
+import com.wuxiaowei.rpc.server.tcp.VertxTcpServer;
 
 /**
  * 简易服务提供者示例
@@ -40,7 +41,7 @@ public class ProviderExample {
         }
 
         // 启动 web 服务
-        HttpServer httpServer = new VertxHttpServer();
+        HttpServer httpServer = new VertxTcpServer();
         httpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
     }
 }
