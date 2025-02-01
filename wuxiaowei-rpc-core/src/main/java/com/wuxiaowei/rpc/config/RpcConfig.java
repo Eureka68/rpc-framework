@@ -1,5 +1,6 @@
 package com.wuxiaowei.rpc.config;
 
+import com.wuxiaowei.rpc.loadbalancer.LoadBalancerKeys;
 import com.wuxiaowei.rpc.serializer.SerializerKeys;
 import lombok.Data;
 
@@ -38,6 +39,11 @@ public class RpcConfig {
      * 序列化器
      */
     private String serializer = SerializerKeys.JDK;
+
+    /**
+     * 负载均衡器
+     */
+    private String loadBalancer = LoadBalancerKeys.ROUND_ROBIN;
 
     /**
      * 注册中心配置
