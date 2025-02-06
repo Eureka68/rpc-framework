@@ -9,6 +9,8 @@ import com.wuxiaowei.rpc.config.RpcConfig;
 import com.wuxiaowei.rpc.constant.RpcConstant;
 import com.wuxiaowei.rpc.fault.retry.RetryStrategy;
 import com.wuxiaowei.rpc.fault.retry.RetryStrategyFactory;
+import com.wuxiaowei.rpc.fault.tolerant.TolerantStrategy;
+import com.wuxiaowei.rpc.fault.tolerant.TolerantStrategyFactory;
 import com.wuxiaowei.rpc.loadbalancer.LoadBalancer;
 import com.wuxiaowei.rpc.loadbalancer.LoadBalancerFactory;
 import com.wuxiaowei.rpc.model.RpcRequest;
@@ -60,34 +62,38 @@ public class ServiceProxy implements InvocationHandler {
                 .parameterTypes(method.getParameterTypes())
                 .args(args)
                 .build();
+
+        // 从注册中心获取服务提供者请求地址
+        RpcConfig rpcConfig = RpcApplication.getRpcConfig();
+        Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
+        ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
+        serviceMetaInfo.setServiceName(serviceName);
+        serviceMetaInfo.setServiceVersion(RpcConstant.DEFAULT_SERVICE_VERSION);
+        List<ServiceMetaInfo> serviceMetaInfoList = registry.serviceDiscovery(serviceMetaInfo.getServiceKey());
+        if (CollUtil.isEmpty(serviceMetaInfoList)) {
+            throw new RuntimeException("暂无服务地址");
+        }
+
+        // 负载均衡
+        LoadBalancer loadBalancer = LoadBalancerFactory.getInstance(rpcConfig.getLoadBalancer());
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("methodName", rpcRequest.getMethodName());
+        ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoList);
+
+        // rpc 请求
+        // 使用重试机制
+        RpcResponse rpcResponse;
         try {
-            // 从注册中心获取服务提供者请求地址
-            RpcConfig rpcConfig = RpcApplication.getRpcConfig();
-            Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
-            ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
-            serviceMetaInfo.setServiceName(serviceName);
-            serviceMetaInfo.setServiceVersion(RpcConstant.DEFAULT_SERVICE_VERSION);
-            List<ServiceMetaInfo> serviceMetaInfoList = registry.serviceDiscovery(serviceMetaInfo.getServiceKey());
-            if (CollUtil.isEmpty(serviceMetaInfoList)) {
-                throw new RuntimeException("暂无服务地址");
-            }
-
-            // 负载均衡
-            LoadBalancer loadBalancer = LoadBalancerFactory.getInstance(rpcConfig.getLoadBalancer());
-            Map<String, Object> requestParams = new HashMap<>();
-            requestParams.put("methodName", rpcRequest.getMethodName());
-            ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoList);
-
-            // 发送 TCP 请求
-            RetryStrategy retryStrategy  = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
-            RpcResponse rpcResponse = retryStrategy.doRetry(() ->
+            RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+            rpcResponse = retryStrategy.doRetry(() ->
                     VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
             );
-
-            return rpcResponse.getData();
         } catch (Exception e) {
-            throw new RuntimeException("调用失败");
+            // 容错机制
+            TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(rpcConfig.getTolerantStrategy());
+            rpcResponse = tolerantStrategy.doTolerant(null, e);
         }
+        return rpcResponse.getData();
     }
 }
 

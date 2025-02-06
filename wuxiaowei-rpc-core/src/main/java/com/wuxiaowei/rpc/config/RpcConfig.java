@@ -1,6 +1,7 @@
 package com.wuxiaowei.rpc.config;
 
 import com.wuxiaowei.rpc.fault.retry.RetryStrategyKeys;
+import com.wuxiaowei.rpc.fault.tolerant.TolerantStrategyKeys;
 import com.wuxiaowei.rpc.loadbalancer.LoadBalancerKeys;
 import com.wuxiaowei.rpc.serializer.SerializerKeys;
 import lombok.Data;
@@ -55,4 +56,10 @@ public class RpcConfig {
      * 重试策略
      */
     private String retryStrategy = RetryStrategyKeys.FIXED_INTERVAL;
+
+    /**
+     * 容错策略
+     */
+    private String tolerantStrategy = TolerantStrategyKeys.FAIL_FAST;
+
 }
