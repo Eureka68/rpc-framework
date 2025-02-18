@@ -9,10 +9,6 @@ import java.io.ByteArrayOutputStream;
 
 /**
  * Kryo 序列化器
- *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @learn <a href="https://codefather.cn">编程宝典</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
 public class KryoSerializer implements Serializer {
     /**
@@ -20,7 +16,7 @@ public class KryoSerializer implements Serializer {
      */
     private static final ThreadLocal<Kryo> KRYO_THREAD_LOCAL = ThreadLocal.withInitial(() -> {
         Kryo kryo = new Kryo();
-        // 设置动态动态序列化和反序列化类，不提前注册所有类（可能有安全问题）
+        // 设置动态序列化和反序列化类，不提前注册所有类（可能有安全问题）
         kryo.setRegistrationRequired(false);
         return kryo;
     });

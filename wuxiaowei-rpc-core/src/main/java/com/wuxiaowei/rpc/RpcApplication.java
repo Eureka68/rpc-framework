@@ -19,7 +19,6 @@ public class RpcApplication {
 
     /**
      * 框架初始化，支持传入自定义配置
-     *
      * @param newRpcConfig
      */
     public static void init(RpcConfig newRpcConfig) {
@@ -53,7 +52,6 @@ public class RpcApplication {
 
     /**
      * 获取配置
-     *
      * @return
      */
     public static RpcConfig getRpcConfig() {

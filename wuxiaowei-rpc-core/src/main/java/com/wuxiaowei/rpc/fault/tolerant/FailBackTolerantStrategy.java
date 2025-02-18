@@ -7,7 +7,6 @@ import java.util.Map;
 
 /**
  * 降级到其他服务 - 容错策略
-
  */
 @Slf4j
 public class FailBackTolerantStrategy implements TolerantStrategy {

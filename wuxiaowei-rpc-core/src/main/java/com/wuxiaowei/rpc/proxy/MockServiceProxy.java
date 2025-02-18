@@ -18,7 +18,6 @@ public class MockServiceProxy implements InvocationHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
         Class<?> returnType = method.getReturnType();
         log.info("mock invoke {}", method.getName());
         return getDefaultObject(returnType);
