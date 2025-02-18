@@ -7,6 +7,9 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/example-commom/pom.xml" />
         <option value="$PROJECT_DIR$/wuxiaowei-rpc-core/pom.xml" />
+        <option value="$PROJECT_DIR$/wuxiaowei-rpc-spring-boot-starter/pom.xml" />
+        <option value="$PROJECT_DIR$/example-springboot-provider/pom.xml" />
+        <option value="$PROJECT_DIR$/example-springboot-consumer/pom.xml" />
       </list>
     </option>
   </component>
