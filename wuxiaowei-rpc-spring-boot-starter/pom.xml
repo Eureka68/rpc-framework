@@ -60,12 +60,12 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.yupi.yurpc.springboot.starter.YuRpcSpringBootStarterApplication</mainClass>
+                    <mainClass>com.wuxiaowei.rpc.springboot.starter.rpcSpringBootStarterApplication</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>repackage</id>
+                        <id>repackage</id>`
                         <goals>
                             <goal>repackage</goal>
                         </goals>

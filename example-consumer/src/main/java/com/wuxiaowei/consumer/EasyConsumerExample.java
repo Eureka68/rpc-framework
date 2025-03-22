@@ -14,7 +14,7 @@ public class EasyConsumerExample {
         // todo 需要获取 UserService 的实现类对象
         UserService userService = ServiceProxyFactory.getProxy(UserService.class);
         User user = new User();
-        user.setName("yupi");
+        user.setName("wuxiaowei");
         // 调用
         User newUser = userService.getUser(user);
         if (newUser != null) {

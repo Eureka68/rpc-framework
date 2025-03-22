@@ -14,7 +14,7 @@ public class ConsumerExample {
         // 获取代理
         UserService userService = ServiceProxyFactory.getProxy(UserService.class);
         User user = new User();
-        user.setName("yupi");
+        user.setName("wuxiaowei");
         // 调用
         User newUser = userService.getUser(user);
         if (newUser != null) {
